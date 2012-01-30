@@ -1038,7 +1038,15 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     private boolean hasCapability(int capability) {
-        return ((mEngineCapabilities & capability) != 0);
+        if(capability == GPS_CAPABILITY_SCHEDULING){
+            //Test returning false to force the platform to handle GPS scheduling,
+            //since on some devices (e.g., Nexus S 4G) native code falsely reports
+            //that it can schedule updates, but then doesn't, effectively ignoring
+            //the interval value that the application has requested
+    		return false;
+		}else{
+			return ((mEngineCapabilities & capability) != 0);
+		}
     }
 
     /**
